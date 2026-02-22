@@ -147,11 +147,11 @@ const filtered = computed(() => {
               </div>
               <p class="text-xs text-[#4c9a93] font-medium mt-0.5">{{ p.specialization }}</p>
               
-              <!-- Address & Location reordered -->
-              <div class="mt-2 text-xs text-slate-500">
-                <p v-if="p.address" class="text-slate-700 leading-relaxed mb-1">{{ p.address }}</p>
-                <div class="flex items-center gap-1">
-                  <MapPinIcon class="w-3.5 h-3.5 text-[#4c9a93] shrink-0" />
+              <!-- Address & Location combined -->
+              <div class="mt-2 flex items-start gap-2 text-[11px] text-slate-500">
+                <MapPinIcon class="w-3.5 h-3.5 mt-0.5 text-[#4c9a93] shrink-0" />
+                <div class="leading-relaxed">
+                  <span v-if="p.address" class="text-slate-700 font-medium">{{ p.address }}, </span>
                   <span>{{ toTitleCase(p.city) }}, {{ toTitleCase(p.province) }}</span>
                 </div>
               </div>
