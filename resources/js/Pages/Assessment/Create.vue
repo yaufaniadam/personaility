@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { useForm, Head } from '@inertiajs/vue3';
+import { useForm, Head, Link } from '@inertiajs/vue3';
 
 const props = defineProps({
   questions: Array,
@@ -181,7 +181,14 @@ const questionNumber = computed(() => {
 <template>
   <Head title="Assessment" />
   <div class="font-sans antialiased text-slate-900 bg-[#f6f8f8]">
-    <div class="min-h-screen py-6 px-4 transition-colors duration-300">
+    <!-- Minimal Header -->
+    <nav class="sticky top-0 z-50 flex items-center justify-center bg-[#f6f8f8]/80 backdrop-blur-md px-6 py-4 border-b border-[#4c9a93]/10">
+      <Link :href="route('home')" class="flex items-center gap-2">
+        <img src="/logo.png" alt="Personaility Logo" class="h-8 w-auto object-contain shrink-0" />
+      </Link>
+    </nav>
+
+    <div class="min-h-[90vh] py-6 px-4 transition-colors duration-300">
       <div class="max-w-lg mx-auto">
 
         <!-- Progress bar (always visible) -->

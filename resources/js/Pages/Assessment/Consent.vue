@@ -27,6 +27,13 @@ const submit = () => {
 <template>
   <Head title="Persetujuan Assessment" />
   <div class="font-sans antialiased text-slate-900 bg-[#f6f8f8]">
+    <!-- Minimal Header -->
+    <nav class="sticky top-0 z-50 flex items-center justify-center bg-[#f6f8f8]/80 backdrop-blur-md px-6 py-4 border-b border-[#4c9a93]/10">
+      <Link :href="route('home')" class="flex items-center gap-2">
+        <img src="/logo.png" alt="Personaility Logo" class="h-8 w-auto object-contain shrink-0" />
+      </Link>
+    </nav>
+
     <div class="min-h-screen py-10 px-4">
       <div class="max-w-lg mx-auto">
 

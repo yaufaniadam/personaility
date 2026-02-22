@@ -101,8 +101,8 @@ const downloadImage = async () => {
   if (!shareCardRef.value) return;
   isGeneratingImage.value = true;
   
-  const shareTextContent = 'Halo aku abis tes kepribadian di personaility. ayo ikutan cek kepribadianmu';
-  const shareUrl = window.location.href;
+  const shareTextContent = 'Ternyata ini sisi lain diriku! 🕵️‍♂️✨ Penasaran sama kepribadian Big Five kamu juga? Yuk, cek sekarang di www.personaility.me dan temukan potensi tersembunyimu! 🚀';
+  const shareUrl = 'https://www.personaility.me';
   const combinedClipboardText = `${shareTextContent}\n${shareUrl}`;
 
   try {
@@ -446,7 +446,7 @@ const downloadImage = async () => {
         <!-- Footer -->
         <div style="text-align: center; position: relative; z-index: 10;">
           <p style="font-size: 14px; font-weight: 700; color: #4c9a93; margin: 0;">Ikuti tes gratismu sekarang di</p>
-          <p style="font-size: 16px; font-weight: 900; color: #0d1b1a; margin-top: 4px;">personaility.me</p>
+          <p style="font-size: 16px; font-weight: 900; color: #0d1b1a; margin-top: 4px;">www.personaility.me</p>
         </div>
       </div>
     </div>

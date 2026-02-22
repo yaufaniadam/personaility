@@ -144,7 +144,7 @@ const insights = [
           <h2 class="text-3xl font-extrabold tracking-tight">Siap Mengenal Dirimu?</h2>
           <p class="text-slate-600">Assessment gratis · AI insight · Tanpa diagnosis klinis</p>
           <div class="flex flex-col gap-4">
-            <Link :href="route('register')" class="bg-[#40D5C8] text-[#0d1b1a] font-bold py-4 rounded-2xl shadow-lg shadow-[#40D5C8]/20 hover:scale-[1.02] active:scale-95 transition-all text-center block">
+            <Link :href="route('assessment.consent')" class="bg-[#40D5C8] text-[#0d1b1a] font-bold py-4 rounded-2xl shadow-lg shadow-[#40D5C8]/20 hover:scale-[1.02] active:scale-95 transition-all text-center block">
               Mulai Sekarang — Gratis
             </Link>
             <div class="mt-4">
