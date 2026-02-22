@@ -87,6 +87,11 @@ class AssessmentResource extends Resource
                         default => 'danger',
                     })
                     ->default('-'),
+                Tables\Columns\TextColumn::make('aiInsight.feedback_comment')
+                    ->label('Komentar FB')
+                    ->limit(30)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column): ?string => $column->getState())
+                    ->default('-'),
                 Tables\Columns\TextColumn::make('version'),
                 Tables\Columns\TextColumn::make('completed_at')->dateTime()->sortable(),
             ])
