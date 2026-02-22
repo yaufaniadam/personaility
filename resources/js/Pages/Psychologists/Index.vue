@@ -26,6 +26,11 @@ const props = defineProps({
 
 const search = ref('');
 
+const toTitleCase = (str) => {
+  if (!str) return '';
+  return str.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+};
+
 const filtered = computed(() => {
   if (!search.value) return props.psychologists;
   const q = search.value.toLowerCase();
@@ -92,7 +97,10 @@ const filtered = computed(() => {
             class="custom-multiselect"
           >
             <template #singleLabel="{ option }">
-              <span class="text-sm">{{ option || 'Semua Kota' }}</span>
+              <span class="text-sm">{{ toTitleCase(option) || 'Semua Kota' }}</span>
+            </template>
+            <template #option="{ option }">
+              <span class="text-sm">{{ toTitleCase(option) }}</span>
             </template>
           </Multiselect>
         </div>
@@ -138,13 +146,15 @@ const filtered = computed(() => {
                 </span>
               </div>
               <p class="text-xs text-[#4c9a93] font-medium mt-0.5">{{ p.specialization }}</p>
-                <div class="mt-3 flex items-start gap-2 text-xs text-slate-500">
-                  <MapPinIcon class="w-4 h-4 text-[#4c9a93] shrink-0" />
-                  <div>
-                    <span class="font-medium text-slate-700 block">{{ p.city }}, {{ p.province }}</span>
-                    <p v-if="p.address" class="mt-0.5 leading-relaxed">{{ p.address }}</p>
-                  </div>
+              
+              <!-- Address & Location reordered -->
+              <div class="mt-2 text-xs text-slate-500">
+                <p v-if="p.address" class="text-slate-700 leading-relaxed mb-1">{{ p.address }}</p>
+                <div class="flex items-center gap-1">
+                  <MapPinIcon class="w-3.5 h-3.5 text-[#4c9a93] shrink-0" />
+                  <span>{{ toTitleCase(p.city) }}, {{ toTitleCase(p.province) }}</span>
                 </div>
+              </div>
             </div>
             <ChevronRightIcon class="w-5 h-5 text-slate-300 flex-shrink-0" />
           </div>

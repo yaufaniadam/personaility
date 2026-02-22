@@ -14,6 +14,11 @@ import Navbar from '@/Components/Navbar.vue';
 import Footer from '@/Components/Footer.vue';
 
 defineProps({ psychologist: Object });
+
+const toTitleCase = (str) => {
+  if (!str) return '';
+  return str.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+};
 </script>
 
 <template>
@@ -58,14 +63,16 @@ defineProps({ psychologist: Object });
                 <CheckBadgeIcon class="w-3 h-3" /> Terverifikasi
               </span>
             </div>
-                <p class="text-slate-600 font-medium mb-1">{{ psychologist.specialization }}</p>
-                <div class="flex items-start gap-2 text-slate-500 text-sm">
-                  <MapPinIcon class="w-4 h-4 mt-0.5 shrink-0" />
-                  <div>
-                    <span>{{ psychologist.city }}, {{ psychologist.province }}</span>
-                    <p v-if="psychologist.address" class="mt-1 text-xs">{{ psychologist.address }}</p>
-                  </div>
-                </div>
+            <p class="text-slate-600 font-medium mb-1">{{ psychologist.specialization }}</p>
+            
+            <!-- Address & Location reordered -->
+            <div class="mt-2">
+              <p v-if="psychologist.address" class="text-sm text-slate-700 leading-relaxed mb-1.5">{{ psychologist.address }}</p>
+              <div class="flex items-center gap-1 text-slate-500 text-xs">
+                <MapPinIcon class="w-3.5 h-3.5 text-[#4c9a93] shrink-0" />
+                <span>{{ toTitleCase(psychologist.city) }}, {{ toTitleCase(psychologist.province) }}</span>
+              </div>
+            </div>
           </div>
         </div>
 
