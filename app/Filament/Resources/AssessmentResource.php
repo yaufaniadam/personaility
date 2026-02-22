@@ -53,8 +53,8 @@ class AssessmentResource extends Resource
                     ->color(fn ($state) => match (true) {
                         $state >= 4 => 'success',
                         $state >= 3 => 'warning',
-                        'default' => 'danger',
-                        null => 'gray',
+                        blank($state) => 'gray',
+                        default => 'danger',
                     })
                     ->default('-'),
                 Infolists\Components\TextEntry::make('aiInsight.feedback_comment')->label('Feedback Comment')->columnSpanFull()->default('-'),
@@ -83,8 +83,8 @@ class AssessmentResource extends Resource
                     ->color(fn ($state) => match (true) {
                         $state >= 4 => 'success',
                         $state >= 3 => 'warning',
-                        'default' => 'danger',
-                        null => 'gray',
+                        blank($state) => 'gray',
+                        default => 'danger',
                     })
                     ->default('-'),
                 Tables\Columns\TextColumn::make('version'),
