@@ -29,6 +29,9 @@ Route::get('/psychologists/{psychologist}', [PsychologistController::class, 'sho
 // ---------------------------------------------------------------
 // OAuth Routes
 // ---------------------------------------------------------------
+// The callback URL must be added to the Google Cloud Console "Authorized redirect URIs".
+// Format: {APP_URL}/auth/google/callback
+// Example: https://personaility.me/auth/google/callback
 Route::get('/auth/google/redirect', [\App\Http\Controllers\Auth\SocialiteController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\SocialiteController::class, 'callback'])->name('auth.google.callback');
 
