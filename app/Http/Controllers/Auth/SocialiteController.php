@@ -42,11 +42,15 @@ class SocialiteController extends Controller
 
             // Check for pending assessment from Guest
             if (session()->has('pending_assessment_id')) {
-                $assessmentId = session()->pull('pending_assessment_id');
-                
+                $assessmentId = session()->get('pending_assessment_id');
                 $assessment = \App\Models\Assessment::find($assessmentId);
-                // Claim assessment: must be unowned AND created within the last 1 hour
-                if ($assessment && is_null($assessment->user_id) && $assessment->created_at->isAfter(now()->subHour())) {
+
+                // Case 1: Assessment not found or expired (older than 24h) and unowned -> Clean up
+                if (!$assessment || (is_null($assessment->user_id) && $assessment->created_at->isBefore(now()->subDay()))) {
+                    session()->forget('pending_assessment_id');
+                }
+                // Case 2: Valid unowned assessment -> Claim it
+                elseif (is_null($assessment->user_id)) {
                     $assessment->update(['user_id' => $user->id]);
 
                     \App\Models\UserActivityLog::create([
@@ -55,7 +59,17 @@ class SocialiteController extends Controller
                         'metadata_json' => ['assessment_id' => $assessment->id, 'note' => 'claimed_after_google_login'],
                     ]);
 
+                    session()->forget('pending_assessment_id');
                     return redirect()->route('assessment.result', $assessment->id);
+                }
+                // Case 3: Already owned by THIS user -> Redirect
+                elseif ($assessment->user_id === $user->id) {
+                    session()->forget('pending_assessment_id');
+                    return redirect()->route('assessment.result', $assessment->id);
+                }
+                // Case 4: Owned by someone else -> Clean up
+                else {
+                    session()->forget('pending_assessment_id');
                 }
             }
 
