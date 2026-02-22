@@ -102,8 +102,7 @@ const downloadImage = async () => {
   isGeneratingImage.value = true;
   
   const shareTextContent = 'Ternyata ini sisi lain diriku! 🕵️‍♂️✨ Penasaran sama kepribadian Big Five kamu juga? Yuk, cek sekarang di www.personaility.me dan temukan potensi tersembunyimu! 🚀';
-  const shareUrl = 'https://www.personaility.me';
-  const combinedClipboardText = `${shareTextContent}\n${shareUrl}`;
+  const combinedClipboardText = shareTextContent;
 
   try {
     const canvas = await html2canvas(shareCardRef.value, {
@@ -127,7 +126,6 @@ const downloadImage = async () => {
           files: [file],
           title: 'Hasil Assessment Kepribadianku',
           text: shareTextContent,
-          url: shareUrl,
         });
         sharedNatively = true;
       } catch (shareErr) {
