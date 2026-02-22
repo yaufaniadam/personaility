@@ -46,6 +46,18 @@ class AssessmentResource extends Resource
                 Infolists\Components\TextEntry::make('aiInsight.blind_spot')->label('Blind Spot')->columnSpanFull(),
                 Infolists\Components\TextEntry::make('aiInsight.growth_suggestion')->label('Growth Suggestion')->columnSpanFull(),
                 Infolists\Components\TextEntry::make('aiInsight.stress_pattern')->label('Stress Pattern')->columnSpanFull(),
+                Infolists\Components\TextEntry::make('aiInsight.feedback_score')
+                    ->label('Feedback Score')
+                    ->numeric()
+                    ->badge()
+                    ->color(fn ($state) => match (true) {
+                        $state >= 4 => 'success',
+                        $state >= 3 => 'warning',
+                        'default' => 'danger',
+                        null => 'gray',
+                    })
+                    ->default('-'),
+                Infolists\Components\TextEntry::make('aiInsight.feedback_comment')->label('Feedback Comment')->columnSpanFull()->default('-'),
                 Infolists\Components\TextEntry::make('aiInsight.model_version')->label('AI Model'),
             ]),
         ]);
@@ -64,6 +76,17 @@ class AssessmentResource extends Resource
                 Tables\Columns\TextColumn::make('extraversion_score')->label('E')->numeric(decimalPlaces: 2),
                 Tables\Columns\TextColumn::make('agreeableness_score')->label('A')->numeric(decimalPlaces: 2),
                 Tables\Columns\TextColumn::make('neuroticism_score')->label('N')->numeric(decimalPlaces: 2),
+                Tables\Columns\TextColumn::make('aiInsight.feedback_score')
+                    ->label('FB')
+                    ->sortable()
+                    ->badge()
+                    ->color(fn ($state) => match (true) {
+                        $state >= 4 => 'success',
+                        $state >= 3 => 'warning',
+                        'default' => 'danger',
+                        null => 'gray',
+                    })
+                    ->default('-'),
                 Tables\Columns\TextColumn::make('version'),
                 Tables\Columns\TextColumn::make('completed_at')->dateTime()->sortable(),
             ])
