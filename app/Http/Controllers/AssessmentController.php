@@ -38,6 +38,10 @@ class AssessmentController extends Controller
      */
     public function create(): Response
     {
+        if (!session()->has('active_assessment_id')) {
+            return redirect()->route('assessment.consent');
+        }
+
         $questions = Question::active()
             ->ordered()
             ->get(['id', 'trait', 'question_text', 'options', 'is_reverse', 'allow_note', 'order_number']);

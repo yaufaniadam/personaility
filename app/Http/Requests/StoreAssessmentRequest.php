@@ -15,7 +15,11 @@ class StoreAssessmentRequest extends FormRequest
     {
         return [
             'answers'                   => ['required', 'array', 'min:1'],
-            'answers.*.question_id'     => ['required', 'integer', 'exists:questions,id'],
+            'answers.*.question_id'     => [
+                'required',
+                'integer',
+                \Illuminate\Validation\Rule::exists('questions', 'id')->where(fn ($query) => $query->where('active', true))
+            ],
             'answers.*.likert_score'    => ['required', 'integer', 'min:1', 'max:5'],
             'answers.*.note_text'       => ['nullable', 'string', 'max:1000'],
             'consent'                   => ['required', 'accepted'],

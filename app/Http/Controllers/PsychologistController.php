@@ -17,6 +17,7 @@ class PsychologistController extends Controller
         $city = request('city');
 
         $query = Psychologist::active()
+            ->verified()
             ->orderBy('name');
 
         if ($city) {
@@ -47,7 +48,7 @@ class PsychologistController extends Controller
      */
     public function show(Psychologist $psychologist): Response
     {
-        abort_unless($psychologist->active, 404);
+        abort_unless($psychologist->active && $psychologist->verified_status, 404);
 
         return Inertia::render('Psychologists/Show', [
             'psychologist' => $psychologist->append('avatar_url')->only([
