@@ -103,7 +103,7 @@ const submit = () => {
 
             <div class="mt-6 flex flex-col gap-4">
                 <PrimaryButton
-                    class="w-full justify-center py-3 rounded-3xl !bg-[#102220] hover:!bg-[#1a3835]"
+                    class="w-full justify-center py-4 rounded-2xl !bg-[#40D5C8] !text-[#0d1b1a] font-bold shadow-lg shadow-[#40D5C8]/20 hover:scale-[1.02] active:scale-95 transition-all outline-none"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
