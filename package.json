@@ -23,5 +23,8 @@
         "vite": "^7.0.7",
         "vue": "^3.5.28",
         "vue-chartjs": "^5.3.3"
+    },
+    "dependencies": {
+        "vue-multiselect": "^3.0.0-beta.3"
     }
 }

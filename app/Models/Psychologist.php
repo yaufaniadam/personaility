@@ -11,10 +11,14 @@ class Psychologist extends Model
 
     protected $fillable = [
         'name',
+        'gender',
+        'photo_path',
         'str_number',
         'sip_number',
         'city',
         'province',
+        'city_code',
+        'province_code',
         'specialization',
         'contact_phone',
         'contact_whatsapp',
@@ -23,6 +27,21 @@ class Psychologist extends Model
         'verified_status',
         'active',
     ];
+
+    public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->photo_path ? '/storage/' . $this->photo_path : null;
+    }
+
+    public function indoProvince()
+    {
+        return $this->belongsTo(\Laravolt\Indonesia\Models\Province::class, 'province_code', 'code');
+    }
+
+    public function indoCity()
+    {
+        return $this->belongsTo(\Laravolt\Indonesia\Models\City::class, 'city_code', 'code');
+    }
 
     protected function casts(): array
     {

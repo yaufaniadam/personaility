@@ -13,6 +13,7 @@ import {
   UserCircleIcon as UserSolid,
   Squares2X2Icon as GridSolid,
 } from '@heroicons/vue/24/solid';
+import Navbar from '@/Components/Navbar.vue';
 
 const page = usePage();
 const user = page.props.auth.user;
@@ -41,25 +42,8 @@ function isActive(routeName) {
   <div class="min-h-screen bg-[#f6f8f8] font-sans">
 
     <!-- Top bar -->
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100 px-5 py-3 flex items-center justify-between">
-      <Link :href="route('dashboard')" class="flex items-center gap-2">
-        <img src="/logo.png" alt="Personaility Logo" class="h-8 w-auto object-contain shrink-0" />
-      </Link>
+    <Navbar />
 
-      <div v-if="user" class="flex items-center gap-2">
-        <div class="text-right hidden sm:block">
-          <p class="text-xs font-semibold text-[#0d1b1a] leading-tight">{{ user.name }}</p>
-          <p class="text-[10px] text-slate-400 leading-tight">{{ user.email }}</p>
-        </div>
-        <Link :href="route('profile.edit')" class="w-8 h-8 rounded-full bg-[#40D5C8]/20 flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-[#40D5C8]/30 transition-colors">
-          <span class="text-xs font-bold text-[#4c9a93]">{{ user.name?.charAt(0)?.toUpperCase() }}</span>
-        </Link>
-      </div>
-      <div v-else class="flex items-center gap-3">
-        <Link :href="route('login')" class="text-sm font-semibold text-[#4c9a93] hover:text-[#0d1b1a] transition-colors">Masuk</Link>
-        <Link :href="route('register')" class="bg-[#40D5C8] text-[#0d1b1a] text-xs font-bold px-3 py-1.5 rounded-xl shadow-md shadow-[#40D5C8]/20 hover:scale-105 active:scale-95 transition-all">Daftar</Link>
-      </div>
-    </header>
 
     <!-- Page content with bottom padding for nav bar -->
     <main class="pb-24">

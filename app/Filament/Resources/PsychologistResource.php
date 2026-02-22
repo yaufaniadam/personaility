@@ -22,14 +22,45 @@ class PsychologistResource extends Resource
         return $form->schema([
             Forms\Components\Section::make('Identity')->schema([
                 Forms\Components\TextInput::make('name')->required(),
+                Forms\Components\Select::make('gender')
+                    ->options([
+                        'male' => 'Laki-laki',
+                        'female' => 'Perempuan',
+                    ])
+                    ->required(),
+                Forms\Components\FileUpload::make('photo_path')
+                    ->label('Photo')
+                    ->image()
+                    ->directory('psychologists/photos')
+                    ->nullable()
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('str_number')->label('STR Number')->required(),
                 Forms\Components\TextInput::make('sip_number')->label('SIP Number')->nullable(),
                 Forms\Components\TextInput::make('specialization')->required(),
             ])->columns(2),
 
             Forms\Components\Section::make('Location')->schema([
-                Forms\Components\TextInput::make('city')->required(),
-                Forms\Components\TextInput::make('province')->required(),
+                Forms\Components\Select::make('province_code')
+                    ->label('Provinsi')
+                    ->options(\Laravolt\Indonesia\Models\Province::pluck('name', 'code'))
+                    ->searchable()
+                    ->live()
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        $set('city_code', null);
+                        $set('province', \Laravolt\Indonesia\Models\Province::where('code', $state)->first()?->name);
+                    })
+                    ->required(),
+                Forms\Components\Select::make('city_code')
+                    ->label('Kota/Kabupaten')
+                    ->options(fn (Forms\Get $get) => \Laravolt\Indonesia\Models\City::where('province_code', $get('province_code'))->pluck('name', 'code'))
+                    ->searchable()
+                    ->live()
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        $set('city', \Laravolt\Indonesia\Models\City::where('code', $state)->first()?->name);
+                    })
+                    ->required(),
+                Forms\Components\Hidden::make('province'),
+                Forms\Components\Hidden::make('city'),
             ])->columns(2),
 
             Forms\Components\Section::make('Contact')->schema([

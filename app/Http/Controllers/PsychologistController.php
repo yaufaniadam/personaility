@@ -17,7 +17,6 @@ class PsychologistController extends Controller
         $city = request('city');
 
         $query = Psychologist::active()
-            ->verified()
             ->orderBy('name');
 
         if ($city) {
@@ -25,18 +24,18 @@ class PsychologistController extends Controller
         }
 
         $psychologists = $query->get([
-            'id', 'name', 'city', 'province', 'specialization',
+            'id', 'name', 'gender', 'photo_path', 'city', 'province', 'specialization',
             'contact_phone', 'contact_whatsapp', 'website', 'verified_status',
         ]);
 
         // Distinct cities for the filter dropdown
-        $cities = Psychologist::active()->verified()
+        $cities = Psychologist::active()
             ->distinct()
             ->orderBy('city')
             ->pluck('city');
 
         return Inertia::render('Psychologists/Index', [
-            'psychologists' => $psychologists,
+            'psychologists' => $psychologists->each->append('avatar_url'),
             'cities'        => $cities,
             'selectedCity'  => $city,
         ]);
@@ -48,11 +47,11 @@ class PsychologistController extends Controller
      */
     public function show(Psychologist $psychologist): Response
     {
-        abort_unless($psychologist->active && $psychologist->verified_status, 404);
+        abort_unless($psychologist->active, 404);
 
         return Inertia::render('Psychologists/Show', [
-            'psychologist' => $psychologist->only([
-                'id', 'name', 'city', 'province', 'specialization', 'verified_status',
+            'psychologist' => $psychologist->append('avatar_url')->only([
+                'id', 'name', 'gender', 'city', 'province', 'specialization', 'verified_status', 'avatar_url', 'photo_path',
                 'bio', 'str_number', 'sip_number', 'contact_whatsapp', 'contact_phone', 'website'
             ]),
         ]);

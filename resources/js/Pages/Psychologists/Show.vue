@@ -3,6 +3,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import {
   ArrowLeftIcon,
   UserIcon,
+  UserCircleIcon,
   CheckBadgeIcon,
   MapPinIcon,
   ChatBubbleLeftIcon,
@@ -29,8 +30,21 @@ defineProps({ psychologist: Object });
       <!-- Profile card -->
       <div class="bg-white rounded-3xl shadow-sm p-6">
         <div class="flex items-start gap-4 mb-5">
-          <div class="flex-shrink-0 w-16 h-16 rounded-2xl bg-[#4c9a93]/20 flex items-center justify-center">
-            <UserIcon class="w-8 h-8 text-[#4c9a93]" />
+          <div
+            class="flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center transition-colors overflow-hidden"
+            :class="{
+              'bg-blue-50 text-blue-600': psychologist.gender === 'male' && !psychologist.avatar_url,
+              'bg-rose-50 text-rose-600': psychologist.gender === 'female' && !psychologist.avatar_url,
+              'bg-[#4c9a93]/20 text-[#4c9a93]': !psychologist.gender && !psychologist.avatar_url
+            }"
+          >
+            <template v-if="psychologist.avatar_url">
+              <img :src="psychologist.avatar_url" class="w-full h-full object-cover" :alt="psychologist.name" />
+            </template>
+            <template v-else>
+              <UserIcon v-if="psychologist.gender === 'male' || !psychologist.gender" class="w-8 h-8" />
+              <UserCircleIcon v-else class="w-8 h-8" />
+            </template>
           </div>
           <div>
             <div class="flex items-center gap-2 flex-wrap">

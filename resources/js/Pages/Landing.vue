@@ -11,7 +11,10 @@ import {
   UserGroupIcon,
   HeartIcon,
   TrophyIcon,
+  ChatBubbleLeftIcon,
+  ArrowTopRightOnSquareIcon,
 } from '@heroicons/vue/24/outline';
+import Navbar from '@/Components/Navbar.vue';
 
 const traits = [
   { icon: SparklesIcon, name: 'Openness', desc: 'Kreativitas, imajinasi, dan keterbukaan terhadap pengalaman baru', color: 'bg-purple-100 text-purple-600' },
@@ -42,15 +45,8 @@ const insights = [
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet"/>
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 flex items-center justify-between bg-[#f6f8f8]/80 backdrop-blur-md px-6 py-4 border-b border-[#4c9a93]/10">
-      <div class="flex items-center gap-2">
-        <img src="/logo.png" alt="Personaility Logo" class="h-10 w-auto object-contain shrink-0" />
-      </div>
-      <div class="flex items-center gap-3">
-        <Link :href="route('login')" class="text-sm font-semibold text-[#4c9a93] hover:text-[#0d1b1a] transition-colors">Masuk</Link>
-        <Link :href="route('register')" class="bg-[#40D5C8] text-[#0d1b1a] text-sm font-bold px-4 py-2 rounded-2xl shadow-md shadow-[#40D5C8]/20 hover:scale-105 active:scale-95 transition-all">Daftar</Link>
-      </div>
-    </nav>
+    <Navbar />
+
 
     <main class="max-w-md mx-auto">
 

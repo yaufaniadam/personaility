@@ -6,12 +6,16 @@ import {
   InformationCircleIcon,
   MagnifyingGlassIcon,
   UserIcon,
+  UserCircleIcon,
   CheckBadgeIcon,
   MapPinIcon,
   ChevronRightIcon,
   ChatBubbleLeftIcon,
   ArrowTopRightOnSquareIcon,
 } from '@heroicons/vue/24/outline';
+import Navbar from '@/Components/Navbar.vue';
+import Multiselect from 'vue-multiselect';
+import 'vue-multiselect/dist/vue-multiselect.css';
 
 const props = defineProps({
   psychologists: Array,
@@ -37,16 +41,10 @@ const filtered = computed(() => {
   <div class="min-h-screen bg-[#f6f8f8] font-sans">
 
     <!-- Nav -->
-    <nav class="sticky top-0 z-50 flex items-center justify-between bg-[#f6f8f8]/80 backdrop-blur-md px-6 py-4 border-b border-[#4c9a93]/10">
-      <Link :href="route('home')">
-        <div class="flex items-center gap-2">
-          <img src="/logo.png" alt="Personaility Logo" class="h-10 w-auto object-contain shrink-0" />
-        </div>
-      </Link>
-      <Link :href="route('dashboard')" class="text-sm font-semibold text-[#4c9a93]">Dashboard</Link>
-    </nav>
+    <Navbar />
 
-    <main class="max-w-2xl mx-auto px-4 py-8">
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
 
       <!-- Header -->
       <div class="mb-8">
@@ -63,9 +61,9 @@ const filtered = computed(() => {
       </div>
 
       <!-- Filters -->
-      <div class="flex gap-3 mb-6">
-        <div class="relative flex-1">
-          <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+      <div class="flex flex-col sm:flex-row gap-3 mb-6">
+        <div class="relative flex-[2]">
+          <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
           <input
             v-model="search"
             type="text"
@@ -73,14 +71,22 @@ const filtered = computed(() => {
             class="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#40D5C8]"
           />
         </div>
-        <select
-          class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#40D5C8]"
-          :value="selectedCity"
-          @change="$inertia.get(route('psychologists.index'), { city: $event.target.value })"
-        >
-          <option value="">Semua Kota</option>
-          <option v-for="city in cities" :key="city" :value="city">{{ city }}</option>
-        </select>
+        <div class="flex-[3]">
+          <Multiselect
+            :model-value="selectedCity"
+            :options="cities"
+            :searchable="true"
+            :close-on-select="true"
+            :show-labels="false"
+            placeholder="Pilih Kota"
+            @update:model-value="$inertia.get(route('psychologists.index'), { city: $event || '' })"
+            class="custom-multiselect"
+          >
+            <template #singleLabel="{ option }">
+              <span class="text-sm">{{ option || 'Semua Kota' }}</span>
+            </template>
+          </Multiselect>
+        </div>
       </div>
 
       <!-- Empty state -->
@@ -99,8 +105,21 @@ const filtered = computed(() => {
         >
           <div class="flex items-start gap-4">
             <!-- Avatar placeholder -->
-            <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-[#4c9a93]/20 flex items-center justify-center">
-              <UserIcon class="w-6 h-6 text-[#4c9a93]" />
+            <div
+              class="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center transition-colors overflow-hidden"
+              :class="{
+                'bg-blue-50 text-blue-600': p.gender === 'male' && !p.avatar_url,
+                'bg-rose-50 text-rose-600': p.gender === 'female' && !p.avatar_url,
+                'bg-[#4c9a93]/20 text-[#4c9a93]': !p.gender && !p.avatar_url
+              }"
+            >
+              <template v-if="p.avatar_url">
+                <img :src="p.avatar_url" class="w-full h-full object-cover" :alt="p.name" />
+              </template>
+              <template v-else>
+                <UserIcon v-if="p.gender === 'male' || !p.gender" class="w-6 h-6" />
+                <UserCircleIcon v-else class="w-6 h-6" />
+              </template>
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
@@ -144,3 +163,29 @@ const filtered = computed(() => {
     </main>
   </div>
 </template>
+
+<style>
+.custom-multiselect .multiselect__tags {
+  border-radius: 1rem !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 8px 40px 0 8px !important;
+  min-height: 48px !important;
+}
+.custom-multiselect .multiselect__select {
+  height: 46px !important;
+}
+.custom-multiselect .multiselect__placeholder {
+  margin-bottom: 0 !important;
+  padding-top: 4px !important;
+  font-size: 14px !important;
+}
+.custom-multiselect .multiselect__single {
+  padding-top: 4px !important;
+  font-size: 14px !important;
+  background: transparent !important;
+}
+.custom-multiselect .multiselect__input {
+  font-size: 14px !important;
+  padding-top: 4px !important;
+}
+</style>
