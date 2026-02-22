@@ -13,7 +13,7 @@ import { SparklesIcon } from '@heroicons/vue/24/outline';
         <img src="/logo.png" alt="Personaility Logo" class="h-12 w-auto object-contain shrink-0 mb-5 drop-shadow-sm group-hover:scale-105 transition-transform duration-300" />
       </Link>
       <p class="text-slate-500 text-sm text-center mt-1 max-w-xs leading-relaxed">
-        Kenali Kedalaman Dirimu, Wujudkan Potensi Terbaikmu.
+        Kenali Dirimu, Wujudkan Potensi Terbaikmu.
       </p>
     </header>
 
