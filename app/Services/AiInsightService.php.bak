@@ -1,0 +1,173 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\AiInsight;
+use App\Models\Assessment;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+class AiInsightService
+{
+    private string $apiKey;
+    private string $model;
+    private string $baseUrl;
+
+    public function __construct()
+    {
+        $this->apiKey  = config('services.ai.key');
+        $this->model   = config('services.ai.model', 'gpt-4o');
+        $this->baseUrl = config('services.ai.base_url', 'https://api.openai.com/v1');
+    }
+
+    /**
+     * Generate and persist AI insights for a completed assessment.
+     * Called once after scoring — NOT on every page load.
+     *
+     * @param  Assessment  $assessment  Must have answers with questions loaded
+     * @param  array<string, float>   $scores  e.g. ['openness' => 3.8, ...]
+     * @param  array<string, string>  $levels  e.g. ['openness' => 'moderate', ...]
+     * @param  array<string>          $notes   Selected user notes from allow_note questions
+     */
+    public function generate(
+        Assessment $assessment,
+        array $scores,
+        array $levels,
+        array $notes = []
+    ): ?AiInsight {
+        // Skip entirely if no API key is configured
+        if (empty($this->apiKey)) {
+            Log::warning('AiInsightService: AI_API_KEY is not set. Skipping insight generation.');
+            return null;
+        }
+
+        $prompt = $this->buildPrompt($scores, $levels, $notes);
+
+        $rawResponse = $this->callApi($prompt);
+
+        // callApi returns null on failure — don't crash the assessment flow
+        if ($rawResponse === null) {
+            return null;
+        }
+
+        $parsed = $this->parseResponse($rawResponse);
+
+        return AiInsight::create([
+            'assessment_id'     => $assessment->id,
+            'core_strength'     => $parsed['core_strength'],
+            'blind_spot'        => $parsed['blind_spot'],
+            'growth_suggestion' => $parsed['growth_suggestion'],
+            'stress_pattern'    => $parsed['stress_pattern'],
+            'raw_prompt'        => $prompt,
+            'raw_response'      => json_encode($rawResponse),
+            'model_version'     => $this->model,
+        ]);
+    }
+
+    // ---------------------------------------------------------------
+    // Private helpers
+    // ---------------------------------------------------------------
+
+    private function buildPrompt(array $scores, array $levels, array $notes): string
+    {
+        $traitLines = collect($scores)
+            ->map(fn ($score, $trait) => sprintf(
+                '  - %s: %.2f (level: %s)',
+                ucfirst($trait),
+                $score,
+                $levels[$trait] ?? 'moderate'
+            ))
+            ->implode("\n");
+
+        $noteLines = ! empty($notes)
+            ? "User reflections:\n" . implode("\n", array_map(fn ($n) => "  - {$n}", $notes))
+            : 'No reflective notes provided.';
+
+        return <<<PROMPT
+You are a personal growth coach providing a compassionate and empowering personality reflection.
+
+The user completed a Big Five (OCEAN) personality assessment. Here are their trait scores on a 1–5 scale:
+
+{$traitLines}
+
+{$noteLines}
+
+Based on this profile, provide a structured reflection in JSON format with exactly these four keys:
+1. "core_strength"    – A 2–3 sentence description of the user's key strengths.
+2. "blind_spot"       – A 2–3 sentence description of an area they may be unaware of.
+3. "growth_suggestion" – A 2–3 sentence actionable suggestion for personal growth.
+4. "stress_pattern"   – A 2–3 sentence description of how they tend to react under stress.
+
+CRITICAL CONSTRAINTS:
+- Do NOT diagnose any mental health condition.
+- Do NOT mention any psychological disorders.
+- Do NOT provide any medical advice.
+- Do NOT suggest therapy as a solution.
+- Write your ENTIRE response in Bahasa Indonesia.
+- Write in a warm, supportive, first-person-friendly tone.
+- Return only valid JSON. No markdown fences. No extra text.
+
+Example format:
+{"core_strength":"...","blind_spot":"...","growth_suggestion":"...","stress_pattern":"..."}
+PROMPT;
+    }
+
+    private function callApi(string $prompt): ?array
+    {
+        try {
+            $response = Http::withToken($this->apiKey)
+                ->baseUrl($this->baseUrl)
+                ->timeout(30)
+                ->post('/chat/completions', [
+                    'model'       => $this->model,
+                    'messages'    => [
+                        ['role' => 'user', 'content' => $prompt],
+                    ],
+                    'temperature' => 0.7,
+                    'max_tokens'  => 800,
+                ]);
+
+            if ($response->failed()) {
+                Log::error('AiInsightService: API request failed.', [
+                    'status' => $response->status(),
+                    'body'   => $response->body(),
+                ]);
+                return null;
+            }
+
+            return $response->json();
+        } catch (\Throwable $e) {
+            Log::error('AiInsightService: Exception during API call.', ['error' => $e->getMessage()]);
+            return null;
+        }
+    }
+
+    private function parseResponse(array $rawResponse): array
+    {
+        $content = $rawResponse['choices'][0]['message']['content'] ?? '{}';
+
+        $parsed = json_decode($content, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE || ! is_array($parsed)) {
+            // Fallback: return empty strings rather than crashing the user flow
+            Log::warning('AiInsightService: Failed to parse JSON response.', [
+                'content' => $content,
+            ]);
+
+            return [
+                'core_strength'    => null,
+                'blind_spot'       => null,
+                'growth_suggestion' => null,
+                'stress_pattern'   => null,
+            ];
+        }
+
+        return [
+            'core_strength'    => $parsed['core_strength'] ?? null,
+            'blind_spot'       => $parsed['blind_spot'] ?? null,
+            'growth_suggestion' => $parsed['growth_suggestion'] ?? null,
+            'stress_pattern'   => $parsed['stress_pattern'] ?? null,
+        ];
+    }
+}
