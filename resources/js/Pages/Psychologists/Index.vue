@@ -14,6 +14,7 @@ import {
   ArrowTopRightOnSquareIcon,
 } from '@heroicons/vue/24/outline';
 import Navbar from '@/Components/Navbar.vue';
+import Footer from '@/Components/Footer.vue';
 import Multiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.css';
 
@@ -161,8 +162,11 @@ const filtered = computed(() => {
         </Link>
       </div>
     </main>
+
+    <Footer />
   </div>
 </template>
+
 
 <style>
 .custom-multiselect .multiselect__tags {

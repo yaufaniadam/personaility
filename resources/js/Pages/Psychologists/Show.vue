@@ -10,6 +10,8 @@ import {
   PhoneIcon,
   ArrowTopRightOnSquareIcon,
 } from '@heroicons/vue/24/outline';
+import Navbar from '@/Components/Navbar.vue';
+import Footer from '@/Components/Footer.vue';
 
 defineProps({ psychologist: Object });
 </script>
@@ -19,11 +21,14 @@ defineProps({ psychologist: Object });
   <div class="min-h-screen bg-[#f6f8f8] font-sans">
 
     <!-- Nav -->
-    <nav class="sticky top-0 z-50 flex items-center justify-between bg-[#f6f8f8]/80 backdrop-blur-md px-6 py-4 border-b border-[#4c9a93]/10">
-      <Link :href="route('psychologists.index')" class="flex items-center gap-2 text-[#4c9a93] font-semibold text-sm">
-        <ArrowLeftIcon class="w-4 h-4" /> Direktori
+    <Navbar />
+
+    <div class="max-w-lg mx-auto px-4 pt-6">
+      <Link :href="route('psychologists.index')" class="flex items-center gap-2 text-[#4c9a93] hover:text-[#0d1b1a] transition-colors font-semibold text-sm">
+        <ArrowLeftIcon class="w-4 h-4" /> Kembali ke Direktori
       </Link>
-    </nav>
+    </div>
+
 
     <main class="max-w-lg mx-auto px-4 py-8 space-y-5">
 
@@ -139,5 +144,8 @@ defineProps({ psychologist: Object });
       </div>
 
     </main>
+
+    <Footer />
   </div>
 </template>
+
