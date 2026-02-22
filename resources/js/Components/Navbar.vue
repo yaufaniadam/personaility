@@ -17,9 +17,6 @@ const user = computed(() => page.props.auth.user);
         
         <div class="flex items-center gap-3">
             <template v-if="user">
-                <!-- Dashboard link - common in auth state -->
-                <Link :href="route('dashboard')" class="text-sm font-semibold text-[#4c9a93] hover:text-[#0d1b1a] transition-colors mr-2">Dashboard</Link>
-                
                 <div class="flex items-center gap-2">
                     <div class="text-right hidden sm:block">
                         <p class="text-xs font-semibold text-[#0d1b1a] leading-tight">{{ user.name }}</p>
