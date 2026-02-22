@@ -61,6 +61,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Assessment::class);
     }
 
+    public function psychologist(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Psychologist::class);
+    }
+
     public function activityLogs(): HasMany
     {
         return $this->hasMany(UserActivityLog::class);
@@ -73,5 +78,10 @@ class User extends Authenticatable implements FilamentUser
     public function isAdmin(): bool
     {
         return $this->role === UserRole::Admin;
+    }
+
+    public function isPsychologist(): bool
+    {
+        return $this->role === UserRole::Psychologist;
     }
 }

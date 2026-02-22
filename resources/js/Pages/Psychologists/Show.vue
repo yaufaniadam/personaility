@@ -58,11 +58,14 @@ defineProps({ psychologist: Object });
                 <CheckBadgeIcon class="w-3 h-3" /> Terverifikasi
               </span>
             </div>
-            <p class="text-sm text-[#4c9a93] font-medium mt-0.5">{{ psychologist.specialization }}</p>
-            <div class="flex items-center gap-1 mt-1">
-              <MapPinIcon class="w-3 h-3 text-slate-400" />
-              <span class="text-xs text-slate-500">{{ psychologist.city }}, {{ psychologist.province }}</span>
-            </div>
+                <p class="text-slate-600 font-medium mb-1">{{ psychologist.specialization }}</p>
+                <div class="flex items-start gap-2 text-slate-500 text-sm">
+                  <MapPinIcon class="w-4 h-4 mt-0.5 shrink-0" />
+                  <div>
+                    <span>{{ psychologist.city }}, {{ psychologist.province }}</span>
+                    <p v-if="psychologist.address" class="mt-1 text-xs">{{ psychologist.address }}</p>
+                  </div>
+                </div>
           </div>
         </div>
 

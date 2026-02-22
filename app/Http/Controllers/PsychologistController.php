@@ -24,7 +24,7 @@ class PsychologistController extends Controller
         }
 
         $psychologists = $query->get([
-            'id', 'name', 'gender', 'photo_path', 'city', 'province', 'specialization',
+            'id', 'name', 'gender', 'photo_path', 'city', 'address', 'province', 'specialization',
             'contact_phone', 'contact_whatsapp', 'website', 'verified_status',
         ]);
 
@@ -51,7 +51,7 @@ class PsychologistController extends Controller
 
         return Inertia::render('Psychologists/Show', [
             'psychologist' => $psychologist->append('avatar_url')->only([
-                'id', 'name', 'gender', 'city', 'province', 'specialization', 'verified_status', 'avatar_url', 'photo_path',
+                'id', 'name', 'gender', 'city', 'address', 'province', 'specialization', 'verified_status', 'avatar_url', 'photo_path',
                 'bio', 'str_number', 'sip_number', 'contact_whatsapp', 'contact_phone', 'website'
             ]),
         ]);

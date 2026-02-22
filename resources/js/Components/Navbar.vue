@@ -33,8 +33,7 @@ const user = computed(() => page.props.auth.user);
                 </div>
             </template>
             <template v-else>
-                <Link :href="route('login')" class="text-sm font-semibold text-[#4c9a93] hover:text-[#0d1b1a] transition-colors">Masuk</Link>
-                <Link :href="route('register')" class="bg-[#40D5C8] text-[#0d1b1a] text-sm font-bold px-4 py-2 rounded-2xl shadow-md shadow-[#40D5C8]/20 hover:scale-105 active:scale-95 transition-all">Daftar</Link>
+                <Link :href="route('login')" class="bg-[#40D5C8] text-[#0d1b1a] text-sm font-bold px-4 py-2 rounded-2xl shadow-md shadow-[#40D5C8]/20 hover:scale-105 active:scale-95 transition-all">Login</Link>
             </template>
         </div>
     </nav>

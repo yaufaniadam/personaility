@@ -59,6 +59,10 @@ class PsychologistResource extends Resource
                         $set('city', \Laravolt\Indonesia\Models\City::where('code', $state)->first()?->name);
                     })
                     ->required(),
+                Forms\Components\Textarea::make('address')
+                    ->label('Alamat Lengkap')
+                    ->nullable()
+                    ->columnSpanFull(),
                 Forms\Components\Hidden::make('province'),
                 Forms\Components\Hidden::make('city'),
             ])->columns(2),

@@ -61,6 +61,14 @@ const filtered = computed(() => {
         </p>
       </div>
 
+      <!-- Psychologist Join link -->
+      <div class="mb-6 px-1">
+        <span class="text-xs text-slate-500">Anda seorang Psikolog? </span>
+        <Link :href="route('psychologist.register')" class="text-xs font-bold text-[#4c9a93] hover:underline">
+          Daftar untuk masuk ke listing ini →
+        </Link>
+      </div>
+
       <!-- Filters -->
       <div class="flex flex-col sm:flex-row gap-3 mb-6">
         <div class="relative flex-[2]">
@@ -130,10 +138,13 @@ const filtered = computed(() => {
                 </span>
               </div>
               <p class="text-xs text-[#4c9a93] font-medium mt-0.5">{{ p.specialization }}</p>
-              <div class="flex items-center gap-1 mt-1">
-                <MapPinIcon class="w-3 h-3 text-slate-400" />
-                <span class="text-xs text-slate-500">{{ p.city }}, {{ p.province }}</span>
-              </div>
+                <div class="mt-3 flex items-start gap-2 text-xs text-slate-500">
+                  <MapPinIcon class="w-4 h-4 text-[#4c9a93] shrink-0" />
+                  <div>
+                    <span class="font-medium text-slate-700 block">{{ p.city }}, {{ p.province }}</span>
+                    <p v-if="p.address" class="mt-0.5 leading-relaxed">{{ p.address }}</p>
+                  </div>
+                </div>
             </div>
             <ChevronRightIcon class="w-5 h-5 text-slate-300 flex-shrink-0" />
           </div>

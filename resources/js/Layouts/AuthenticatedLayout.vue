@@ -18,20 +18,39 @@ import Navbar from '@/Components/Navbar.vue';
 const page = usePage();
 const user = page.props.auth.user;
 
-const navItems = [
-  {
-    label: 'Home',
-    route: 'dashboard',
-    icon: HomeIcon,
-    iconActive: HomeIconSolid,
-  },
-  {
-    label: 'Arsip',
-    route: 'assessment.history',
-    icon: ClipboardDocumentListIcon,
-    iconActive: ClipboardSolid,
-  },
-];
+const navItems = computed(() => {
+  if (user.role === 'psychologist') {
+    return [
+      {
+        label: 'Dashboard',
+        route: 'psychologist.dashboard',
+        icon: HomeIcon,
+        iconActive: HomeIconSolid,
+      },
+      {
+        label: 'Profil Publik',
+        route: 'psychologists.show',
+        params: { psychologist: user.psychologist?.id },
+        icon: UserCircleIcon,
+        iconActive: UserSolid,
+      },
+    ];
+  }
+  return [
+    {
+      label: 'Home',
+      route: 'dashboard',
+      icon: HomeIcon,
+      iconActive: HomeIconSolid,
+    },
+    {
+      label: 'Arsip',
+      route: 'assessment.history',
+      icon: ClipboardDocumentListIcon,
+      iconActive: ClipboardSolid,
+    },
+  ];
+});
 
 function isActive(routeName) {
   return route().current(routeName) || route().current(routeName + '.*');
@@ -58,7 +77,7 @@ function isActive(routeName) {
         <Link
           v-for="item in navItems.slice(0, 1)"
           :key="item.route"
-          :href="route(item.route)"
+          :href="route(item.route, item.params || {})"
           class="flex flex-col items-center gap-1 min-w-[60px] py-1 transition-colors"
           :class="isActive(item.route) ? 'text-[#40D5C8]' : 'text-slate-400'"
         >
@@ -81,7 +100,7 @@ function isActive(routeName) {
         <Link
           v-for="item in navItems.slice(1)"
           :key="item.route"
-          :href="route(item.route)"
+          :href="route(item.route, item.params || {})"
           class="flex flex-col items-center gap-1 min-w-[60px] py-1 transition-colors"
           :class="isActive(item.route) ? 'text-[#40D5C8]' : 'text-slate-400'"
         >

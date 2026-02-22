@@ -168,6 +168,18 @@ const insights = [
           </Link>
         </div>
       </section>
+
+      <!-- Psychologist Join CTA -->
+      <section class="px-6 pb-24">
+        <div class="bg-white border-2 border-dashed border-[#4c9a93]/20 rounded-2xl p-6 text-center">
+          <IdentificationIcon class="w-8 h-8 text-[#4c9a93] mx-auto mb-2" />
+          <h3 class="font-bold text-lg mb-1">Anda Seorang Psikolog?</h3>
+          <p class="text-sm text-slate-600 mb-4">Bergabunglah dengan direktori kami untuk menjangkau lebih banyak orang.</p>
+          <Link :href="route('psychologist.register')" class="inline-block bg-[#4c9a93] text-white font-bold px-6 py-2.5 rounded-xl hover:bg-[#0d1b1a] transition-colors shadow-sm">
+            Daftar sebagai Psikolog
+          </Link>
+        </div>
+      </section>
     </main>
 
     <!-- Footer -->

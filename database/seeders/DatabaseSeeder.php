@@ -9,6 +9,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            \Laravolt\Indonesia\Seeds\IndonesiaSeeder::class,
             AdminUserSeeder::class,
             QuestionSeeder::class,
         ]);

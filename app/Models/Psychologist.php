@@ -10,6 +10,7 @@ class Psychologist extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'name',
         'gender',
         'photo_path',
@@ -18,6 +19,7 @@ class Psychologist extends Model
         'city',
         'province',
         'city_code',
+        'address',
         'province_code',
         'specialization',
         'contact_phone',
@@ -41,6 +43,11 @@ class Psychologist extends Model
     public function indoCity()
     {
         return $this->belongsTo(\Laravolt\Indonesia\Models\City::class, 'city_code', 'code');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     protected function casts(): array
