@@ -22,7 +22,7 @@ class SocialiteController extends Controller
     /**
      * Obtain the user information from Google.
      */
-    public function callback()
+    public function callback(Request $request)
     {
         try {
             $googleUser = Socialite::driver('google')->user();
@@ -38,6 +38,7 @@ class SocialiteController extends Controller
             ]);
 
             Auth::login($user);
+            $request->session()->regenerate();
 
             // Check for pending assessment from Guest
             if (session()->has('pending_assessment_id')) {
@@ -54,11 +55,11 @@ class SocialiteController extends Controller
                         'metadata_json' => ['assessment_id' => $assessment->id, 'note' => 'claimed_after_google_login'],
                     ]);
 
-                    return redirect()->intended(route('assessment.result', $assessment->id, absolute: false));
+                    return redirect()->route('assessment.result', $assessment->id);
                 }
             }
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->route('dashboard');
 
         } catch (\Exception $e) {
             // Log the exception if needed
