@@ -34,8 +34,8 @@ class AppServiceProvider extends ServiceProvider
         );
 
         RateLimiter::for('ai_insight', function (Request $request) {
-            // Limit to 5 requests per 10 minutes per User ID (or IP if not logged in - though insight requires auth)
-            return Limit::perMinutes(10, 5)->by($request->user()?->id ?: $request->ip());
+            // Increased to 100 per minute to support multiple users on same IP
+            return Limit::perMinute(100)->by($request->user()?->id ?: $request->ip());
         });
     }
 }

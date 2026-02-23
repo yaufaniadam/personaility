@@ -45,11 +45,11 @@ Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\SocialiteControl
 Route::get('/assessment/consent', [AssessmentController::class, 'consent'])->name('assessment.consent');
 Route::post('/assessment/start', [AssessmentController::class, 'start'])
     ->name('assessment.start')
-    ->middleware('throttle:60,1'); // Max 60 starts per minute per IP
+    ->middleware('throttle:300,1'); // Increased to 300 for shared networks
 Route::get('/assessment/create', [AssessmentController::class, 'create'])->name('assessment.create');
 Route::post('/assessment', [AssessmentController::class, 'store'])
     ->name('assessment.store')
-    ->middleware('throttle:60,1'); // Layer 1: Max 60 submissions per 1 minute per IP
+    ->middleware('throttle:300,1'); // Increased to 300 for shared networks
 
 // ---------------------------------------------------------------
 // Authenticated routes
