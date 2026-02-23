@@ -46,7 +46,10 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        // Gunakan dispatch afterResponse agar user tidak menunggu proses kirim email (loading lama)
+        dispatch(function () use ($user) {
+            event(new Registered($user));
+        })->afterResponse();
 
         Auth::login($user);
 
